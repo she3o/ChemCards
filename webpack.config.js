@@ -1,6 +1,7 @@
 // webpack.config.js
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin');
 
 module.exports = [
   // 2D Front Card Configuration
@@ -9,6 +10,7 @@ module.exports = [
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: '2d_front.bundle.js',
+      publicPath: '',
     },
     plugins: [
       new HtmlWebpackPlugin({
@@ -20,6 +22,7 @@ module.exports = [
           removeComments: true,
         },
       }),
+      new HtmlInlineScriptPlugin(),
     ],
     mode: 'production',
   },
@@ -29,6 +32,7 @@ module.exports = [
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: '2d_back.bundle.js',
+      publicPath: '',
     },
     plugins: [
       new HtmlWebpackPlugin({
@@ -40,6 +44,7 @@ module.exports = [
           removeComments: true,
         },
       }),
+      new HtmlInlineScriptPlugin(),
     ],
     mode: 'production',
   },
@@ -49,6 +54,7 @@ module.exports = [
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: '3d_front.bundle.js',
+      publicPath: '',
     },
     plugins: [
       new HtmlWebpackPlugin({
@@ -60,6 +66,7 @@ module.exports = [
           removeComments: true,
         },
       }),
+      new HtmlInlineScriptPlugin(),
     ],
     mode: 'production',
   },
@@ -69,6 +76,7 @@ module.exports = [
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: '3d_back.bundle.js',
+      publicPath: '',
     },
     plugins: [
       new HtmlWebpackPlugin({
@@ -80,6 +88,7 @@ module.exports = [
           removeComments: true,
         },
       }),
+      new HtmlInlineScriptPlugin(),
     ],
     mode: 'production',
   },

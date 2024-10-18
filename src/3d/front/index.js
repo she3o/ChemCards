@@ -1,11 +1,13 @@
 import * as $3Dmol from '3dmol';
+import { showLoader, displayErrorMessage, clearErrorMessage } from '../../common/loader';
+import { getCachedData, cacheData } from '../../common/cache';
 
 // Function to fetch SDF data from PubChem or use cached data
 async function fetchSDF(compoundName) {
   showLoader(true);
   clearErrorMessage();
   const cacheKey = `sdf_${encodeURIComponent(compoundName)}`;
-  const cachedSDF = getCachedSDF(cacheKey);
+  const cachedSDF = getCachedData(cacheKey);
 
   if (cachedSDF) {
     display3DmolViewer(cachedSDF);
@@ -15,7 +17,7 @@ async function fetchSDF(compoundName) {
       const sdfData = await fetchPubchemSDF(compoundName);
 
       if (sdfData) {
-        cacheSDF(cacheKey, sdfData);
+        cacheData(cacheKey, sdfData);
         display3DmolViewer(sdfData);
       } else {
         console.error(`SDF data not found for ${compoundName}.`);
@@ -27,41 +29,6 @@ async function fetchSDF(compoundName) {
     } finally {
       showLoader(false);
     }
-  }
-}
-
-function showLoader(visible) {
-  document.getElementById('loader').style.display = visible ? 'block' : 'none';
-}
-
-function displayErrorMessage(message) {
-  const errorDiv = document.getElementById('error-message');
-  errorDiv.style.display = 'block';
-  errorDiv.textContent = message;
-}
-
-function clearErrorMessage() {
-  const errorDiv = document.getElementById('error-message');
-  errorDiv.style.display = 'none';
-  errorDiv.textContent = '';
-}
-
-// Function to cache SDF data in localStorage
-function cacheSDF(cacheKey, sdfData) {
-  try {
-    localStorage.setItem(cacheKey, sdfData);
-  } catch (e) {
-    console.warn('Local storage is full or not available.', e);
-  }
-}
-
-// Function to get cached SDF data from localStorage
-function getCachedSDF(cacheKey) {
-  try {
-    return localStorage.getItem(cacheKey);
-  } catch (e) {
-    console.warn('Local storage is not available.', e);
-    return null;
   }
 }
 
@@ -125,4 +92,3 @@ function display3DmolViewer(sdfData) {
 // Call the function with the desired compound name
 const compoundName = '{{mol}}'; // Placeholder for Anki
 fetchSDF(compoundName);
-

@@ -1,0 +1,40 @@
+<!-- Front side template for 3D card -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      .card {
+        font-family: Arial, sans-serif;
+        font-size: 20px;
+        text-align: center;
+        color: white;
+        background-color: black;
+      }
+
+      #viewer3D {
+        width: 100vw;
+        height: 90vh;
+      }
+
+      #loader {
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      #error-message {
+        text-align: center;
+        margin-top: 20px;
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div id="viewer3D"></div>
+      <div id="loader">Loading...</div>
+      <div id="error-message" style="display: none;"></div>
+    </div>
+  </body>
+</html>
+

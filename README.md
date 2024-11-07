@@ -1,4 +1,4 @@
-# Chem-Cards
+# ChemCards
 
 This project generates 2D and 3D chemical structure flashcards
 for consumption with Anki.

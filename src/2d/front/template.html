@@ -1,43 +1,45 @@
 <!-- Front side template for 2D card -->
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
-      .card {
-        font-family: Arial, sans-serif;
-        font-size: 20px;
-        text-align: center;
-        color: black;
-        background-color: white;
-      }
+        .card {
+            font-family: Arial, sans-serif;
+            font-size: 20px;
+            text-align: center;
+            color: black;
+            background-color: white;
+        }
 
-      #smiles-canvas {
-        max-width: 100vw;
-        max-height: 90vh;
-        margin: auto;
-      }
+        #smiles-canvas {
+            max-width: 100vw;
+            max-height: 90vh;
+            margin: auto;
+        }
 
-      #loader {
-        text-align: center;
-        margin-top: 20px;
-      }
+        #loader {
+            text-align: center;
+            margin-top: 20px;
+        }
 
-      #error-message {
-        text-align: center;
-        margin-top: 20px;
-        color: red;
-      }
+        #error-message {
+            text-align: center;
+            margin-top: 20px;
+            color: red;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/smiles-drawer@2.0.1/dist/smiles-drawer.min.js"></script>
-  </head>
-  <body>
-    <div class="card">
-      <canvas id="smiles-canvas"></canvas>
-      <div id="loader">Loading...</div>
-      <div id="error-message" style="display: none;"></div>
-    </div>
-  </body>
-</html>
+</head>
 
+<body>
+    <div class="card">
+        <canvas id="smiles-canvas"></canvas>
+        <div id="loader">Loading...</div>
+        <div id="error-message" style="display: none;"></div>
+    </div>
+</body>
+
+</html>

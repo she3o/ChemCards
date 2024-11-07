@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rm -rf dist",
     "build": "webpack --config webpack.config.js"
   },
   "keywords": [],
@@ -20,7 +20,6 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "3dmol": "^2.4.0",
-    "smiles-drawer": "^2.1.7"
+    "3dmol": "^2.4.0"
   }
 }

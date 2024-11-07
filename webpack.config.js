@@ -3,94 +3,39 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin');
 
-module.exports = [
-  // 2D Front Card Configuration
-  {
-    entry: './src/2d/front/index.js',
-    output: {
-      path: path.resolve(__dirname, 'dist'),
-      filename: '2d_front.bundle.js',
-      publicPath: '',
+// Common configuration settings
+const mode = "production";
+const outputPath = path.resolve(__dirname, "dist");
+const commonPlugins = (type, side) => [
+  new HtmlWebpackPlugin({
+    template: `./src/${type}/${side}/template.html`,
+    filename: `${type}_${side}.min.html`,
+    inject: "body",
+    minify: {
+      collapseWhitespace: true,
+      removeComments: true,
     },
-    plugins: [
-      new HtmlWebpackPlugin({
-        template: './src/2d/front/template.html',
-        filename: '2d_front.min.html',
-        inject: 'body',
-        minify: {
-          collapseWhitespace: true,
-          removeComments: true,
-        },
-      }),
-      new HtmlInlineScriptPlugin(),
-    ],
-    mode: 'production',
-  },
-  // 2D Back Card Configuration
-  {
-    entry: './src/2d/back/index.js',
-    output: {
-      path: path.resolve(__dirname, 'dist'),
-      filename: '2d_back.bundle.js',
-      publicPath: '',
-    },
-    plugins: [
-      new HtmlWebpackPlugin({
-        template: './src/2d/back/template.html',
-        filename: '2d_back.min.html',
-        inject: 'body',
-        minify: {
-          collapseWhitespace: true,
-          removeComments: true,
-        },
-      }),
-      new HtmlInlineScriptPlugin(),
-    ],
-    mode: 'production',
-  },
-  // 3D Front Card Configuration
-  {
-    entry: './src/3d/front/index.js',
-    output: {
-      path: path.resolve(__dirname, 'dist'),
-      filename: '3d_front.bundle.js',
-      publicPath: '',
-    },
-    plugins: [
-      new HtmlWebpackPlugin({
-        template: './src/3d/front/template.html',
-        filename: '3d_front.min.html',
-        inject: 'body',
-        minify: {
-          collapseWhitespace: true,
-          removeComments: true,
-        },
-      }),
-      new HtmlInlineScriptPlugin(),
-    ],
-    mode: 'production',
-  },
-  // 3D Back Card Configuration
-  {
-    entry: './src/3d/back/index.js',
-    output: {
-      path: path.resolve(__dirname, 'dist'),
-      filename: '3d_back.bundle.js',
-      publicPath: '',
-    },
-    plugins: [
-      new HtmlWebpackPlugin({
-        template: './src/3d/back/template.html',
-        filename: '3d_back.min.html',
-        inject: 'body',
-        minify: {
-          collapseWhitespace: true,
-          removeComments: true,
-        },
-      }),
-      new HtmlInlineScriptPlugin(),
-    ],
-    mode: 'production',
-  },
+  }),
+  new HtmlInlineScriptPlugin(),
 ];
+
+// Define the different types and sides you have
+const cardTypes = ["2d", "3d"];
+const cardSides = ["front", "back"];
+
+// Generate configurations for each combination of type and side
+const configs = cardTypes.flatMap((type) =>
+  cardSides.map((side) => ({
+    entry: `./src/${type}/${side}/index.js`,
+    output: {
+      path: outputPath,
+      filename: `${type}_${side}.bundle.js`,
+      publicPath: "",
+    },
+    plugins: commonPlugins(type, side),
+    mode,
+  }))
+);
+
+module.exports = configs;
 

@@ -6,9 +6,9 @@ for consumption with Anki.
 ## Features
 
 - [x] 2D rendering (SmilesDrawer)
-  - [] Substructure highlighting
+  - [ ] Substructure highlighting
 - [x] 3D rendering (3dmol)
-  - [] ESP maps
+  - [ ] ESP maps
 - [x] Fetch from Pubchem API
 - [x] Works with Ankidroid and desktop Anki
 - [x] Caches results from PubChem

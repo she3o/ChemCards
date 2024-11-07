@@ -1,31 +1,33 @@
-import SmilesDrawer from 'smiles-drawer';
-import { showLoader, displayErrorMessage, clearErrorMessage } from '../../common/loader';
-import { getCachedData, cacheData } from '../../common/cache';
+import { showLoader, displayErrorMessage, clearErrorMessage } from '../../common/lib';
+import { getCachedData, generateCache } from '../../common/lib';
+import { resolveCompoundName } from '../../common/lib'
+
 
 // Function to fetch SMILES data from PubChem or use cached data
-async function fetchSMILES(compoundName) {
+async function loadAndDisplay(compoundName) {
   showLoader(true);
   clearErrorMessage();
-  const cacheKey = `smiles_${encodeURIComponent(compoundName)}`;
-  const cachedSMILES = getCachedData(cacheKey);
 
-  if (cachedSMILES) {
-    displaySmilesDrawer(cachedSMILES);
+  const cacheKey = `smiles_${encodeURIComponent(compoundName)}`;
+  const cacheData = getCachedData(cacheKey);
+
+  if (cacheData) {
+    renderMoleculeWithSmilesDrawer(cacheData);
     showLoader(false);
   } else {
     try {
-      const smilesData = await fetchPubchemSMILES(compoundName);
+      const fetchedData = await fetchSMILESDataFromPubchem(compoundName);
 
-      if (smilesData) {
-        cacheData(cacheKey, smilesData);
-        displaySmilesDrawer(smilesData);
+      if (fetchedData) {
+        generateCache(cacheKey, fetchedData);
+        renderMoleculeWithSmilesDrawer(fetchedData);
       } else {
-        console.error(`SMILES data not found for ${compoundName}.`);
-        displayErrorMessage(`SMILES data not found for "${compoundName}".`);
+        console.error(`Requested data not found for ${compoundName}.`);
+        displayErrorMessage(`Requested data not found for "${compoundName}".`);
       }
     } catch (error) {
-      console.error('Error fetching or displaying SMILES data:', error);
-      displayErrorMessage('Error fetching or displaying SMILES data.');
+      console.error("Error fetching or displaying requested data:", error);
+      displayErrorMessage("Error fetching or displaying requested data.");
     } finally {
       showLoader(false);
     }
@@ -33,9 +35,9 @@ async function fetchSMILES(compoundName) {
 }
 
 // Function to fetch SMILES data from PubChem
-async function fetchPubchemSMILES(compoundName) {
+async function fetchSMILESDataFromPubchem(compoundName) {
   const pubChemURL = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/${encodeURIComponent(
-    compoundName
+    compoundName,
   )}/property/CanonicalSMILES/TXT`;
 
   try {
@@ -50,19 +52,19 @@ async function fetchPubchemSMILES(compoundName) {
     }
     const smiles = await response.text(); // Handle plain text response
     if (smiles.trim()) {
-      return smiles.trim(); // Return the SMILES string, ensuring it's trimmed
+      return smiles.trim();
     } else {
       // Empty response
       return null;
     }
   } catch (error) {
-    console.error('Error fetching SMILES data from PubChem:', error);
+    console.error("Error fetching SMILES data from PubChem:", error);
     throw error;
   }
 }
 
 // Function to display the molecule using SmilesDrawer
-function displaySmilesDrawer(smiles) {
+function renderMoleculeWithSmilesDrawer(smiles) {
   const smilesDrawer = new SmilesDrawer.Drawer({
     width: 500,
     height: 500,
@@ -73,16 +75,15 @@ function displaySmilesDrawer(smiles) {
   SmilesDrawer.parse(
     smiles,
     function (tree) {
-      smilesDrawer.draw(tree, 'smiles-canvas', 'light', false);
+      smilesDrawer.draw(tree, "smiles-canvas", "light", false);
     },
     function (err) {
       console.error(err);
-      displayErrorMessage('Error parsing SMILES data.');
-    }
+      displayErrorMessage("Error parsing SMILES data.");
+    },
   );
 }
 
 // Call the function with the desired compound name
-const compoundName = '{{mol}}'; // Placeholder for Anki
-fetchSMILES(compoundName);
-
+const compoundName = resolveCompoundName();
+loadAndDisplay(compoundName);
